@@ -140,8 +140,14 @@ download \
   "https://github.com/fribidi/fribidi/releases/download/v1.0.2/"
 
 download \
-  "0.13.6.tar.gz" \
-  "libass-0.13.6.tar.gz" \
+  "libunibreak-6.1.tar.gz" \
+  "" \
+  "nil" \
+  "https://github.com/adah1972/libunibreak/releases/download/libunibreak_6_1/" \
+
+download \
+  "0.17.3.tar.gz" \
+  "libass-0.17.3.tar.gz" \
   "nil" \
   "https://github.com/libass/libass/archive/"
 
@@ -170,10 +176,10 @@ download \
   "https://rtmpdump.mplayerhq.hu/download/"
 
 download \
-  "soxr-0.1.2-Source.tar.xz" \
-  "" \
-  "0866fc4320e26f47152798ac000de1c0" \
-  "https://sourceforge.net/projects/soxr/files/"
+  "0.1.2.tar.gz" \
+  "soxr-0.1.2-Source.tar.gz" \
+  "nil" \
+  "https://github.com/chirlu/soxr/archive/refs/tags/"
 
 download \
   "release-0.98b.tar.gz" \
@@ -232,6 +238,8 @@ download \
 [ $download_only -eq 1 ] && exit 0
 
 TARGET_DIR_SED=$(echo $TARGET_DIR | awk '{gsub(/\//, "\\/"); print}')
+
+PKG_CONFIG_PATH="$TARGET_DIR/lib/pkgconfig"
 
 if [ $is_x86 -eq 1 ]; then
     echo "*** Building yasm ***"
@@ -311,11 +319,17 @@ cd $BUILD_DIR/fribidi-*
 make -j $jval
 make install
 
+echo "*** Building unibreak ***"
+cd $BUILD_DIR/libunibreak-*
+[ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
+./configure --prefix=$TARGET_DIR --disable-shared --enable-static
+make -j $jval
+make install
+
 echo "*** Building libass ***"
 cd $BUILD_DIR/libass-*
 [ $rebuild -eq 1 -a -f Makefile ] && make distclean || true
-./autogen.sh
-./configure --prefix=$TARGET_DIR --disable-shared
+./configure --prefix=$TARGET_DIR --disable-shared --enable-libunibreak
 make -j $jval
 make install
 

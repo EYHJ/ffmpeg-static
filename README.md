@@ -1,3 +1,9 @@
+对原仓库更改如下：
+- ffmpeg版本更新至7.1, 并修复了一些由于版本更新带来的编译问题(只在docker环境下测试通过)
+- 增加libunibreak, 并启用libass的对应功能, 使支持unicode字幕的自动换行
+
+# 以下是原仓库readme
+
 FFmpeg static build
 ===================
 

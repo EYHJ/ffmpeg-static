@@ -7,7 +7,14 @@ RUN apt-get update && apt-get install -y \
   tar \
   wget \
   xz-utils \
+  git \
+  python3 \
+  python3-pip \
+  ninja-build \
   && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN pip3 install --break-system-packages meson
 
 # Install packages necessary for compilation.
 RUN apt-get update && apt-get install -y \
